@@ -47,3 +47,13 @@ Thumbs.db
 # ==============================
 *.pkl~
 *.joblib~
+
+# Raw Kaggle datasets
+data/train.csv
+data/test.csv
+data/store-sales-time-series-forecasting.zip
+data/holidays_events.csv
+data/oil.csv
+data/stores.csv
+data/transactions.csv
+data/sample_submission.csv
