@@ -44,6 +44,27 @@ The original transaction-level data is aggregated across stores to produce daily
 
 The target variable is `sales`, representing the monetary value of sales in USD.
 
+## Dataset Source
+
+This project uses the **Store Sales – Time Series Forecasting** dataset provided by Corporación Favorita, originally published on Kaggle.
+
+The dataset contains historical daily sales records from multiple product families across Favorita grocery stores in Ecuador. It also includes supporting information such as store metadata, transactions, oil prices, and holiday events.
+
+**Dataset source:** [Store Sales – Time Series Forecasting | Kaggle](https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data)
+
+**Note:** The original dataset files are not included in this GitHub repository due to file size limitations. To reproduce this project, download the dataset directly from Kaggle and place the required files in the `data/` directory according to the project structure.
+
+### Dataset Files
+The project uses the following source files:
+- `train.csv` – Historical daily sales data.
+- `test.csv` – Test dataset.
+- `stores.csv` – Store metadata.
+- `transactions.csv` – Daily transaction records.
+- `oil.csv` – Daily oil prices.
+- `holidays_events.csv` – Holiday and event information.
+
+Processed datasets and model outputs used for analysis and Power BI visualization are provided in this repository where applicable.
+
 ## Methodology
 
 ### 1. Data Preparation
@@ -210,38 +231,61 @@ Evaluates forecasting models through:
 ```text
 retail-sales-forecasting/
 │
+├── README.md
+├── requirements.txt
+├── .gitignore
+│
+├── dashboard/
+│   └── power-bi/
+│       ├── README.md
+│       └── retail-sales-forecasting-dashboard.pbix
+│
 ├── data/
+│   │
 │   ├── processed/
+│   │   ├── daily_family_sales.csv
+│   │   ├── forecasting_features.csv
+│   │   ├── final_forecast.csv
+│   │   ├── rolling_validation_metrics.csv
+│   │   ├── rolling_validation_metrics_by_family.csv
+│   │   ├── rolling_validation_metrics_by_fold.csv
+│   │   └── validation_predictions.csv
+│   │
 │   └── dashboard/
-│
-├── notebooks/
-│   ├── 01_data_understanding.ipynb
-│   ├── 02_eda.ipynb
-│   ├── 03_feature_engineering.ipynb
-│   ├── 04_baseline_modeling.ipynb
-│   ├── 05_random_forest_modeling.ipynb
-│   └── 06_model_evaluation_forecasting.ipynb
-│
-├── src/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── data_loader.py
-│   ├── preprocessing.py
-│   ├── feature_engineering.py
-│   ├── forecasting.py
-│   └── evaluation.py
+│       ├── historical_sales.csv
+│       ├── demand_forecast.csv
+│       └── validation_predictions.csv
 │
 ├── models/
+│   ├── best_rf_params.json
+│   ├── final_random_forest.joblib
+│   └── model_metadata.json
 │
-├── powerbi/
-│   └── retail_sales_dashboard.pbix
+├── notebooks/
+│   ├── 01_data-understanding.ipynb
+│   ├── 02_feature-engineering.ipynb
+│   ├── 03_baseline-forecasting.ipynb
+│   └── 04_random-forest-model.ipynb
 │
 ├── reports/
-│   └── figures/
+│   ├── EDA/
+│   │   ├── averagesales-dayoftheweek.png
+│   │   ├── daily-sales-trend.png
+│   │   ├── distribution-daily-sales.png
+│   │   ├── top-15-product-family.png
+│   │   └── weekly-sales-pattern.png
+│   │
+│   └── baseline-forecasting/
+│       ├── actualvsforecast-grocery.png
+│       └── actualvsforecast-others.png
 │
-├── requirements.txt
-├── README.md
-└── .gitignore
+└── src/
+    ├── __init__.py
+    ├── config.py
+    ├── data_loader.py
+    ├── evaluation.py
+    ├── forecasting.py
+    └── export_to_sheets.py
 ```
 
 ## Installation
@@ -330,5 +374,6 @@ Update the data source paths if necessary to match your local repository directo
 Industrial Engineering Graduate  
 Universitas Islam Indonesia
 
-Interested in Data Science, Machine Learning, Optimization, and Supply Chain Analytics.#   E n d - t o - e n d - R e t a i l - S a l e s - F o r e c a s t i n g - P r o j e c t  
+Interested in Data Science, Machine Learning, Optimization, and Supply Chain Analytics.#   E n d - t o - e n d - R e t a i l - S a l e s - F o r e c a s t i n g - P r o j e c t 
+ 
  
