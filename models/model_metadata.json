@@ -1,0 +1,26 @@
+{
+    "model_name": "Random Forest Regressor",
+    "target": "sales",
+    "features": [
+        "family",
+        "day_of_week",
+        "day_of_month",
+        "month",
+        "year",
+        "lag_1",
+        "lag_7",
+        "lag_14",
+        "lag_28",
+        "rolling_mean_7",
+        "rolling_mean_28"
+    ],
+    "forecast_horizon": 7,
+    "training_end_date": "2017-08-15",
+    "best_parameters": {
+        "n_estimators": 200,
+        "max_depth": 15,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "max_features": 0.7
+    }
+}

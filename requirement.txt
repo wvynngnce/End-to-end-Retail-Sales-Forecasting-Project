@@ -1,0 +1,22 @@
+# Core data processing
+pandas
+numpy
+
+# Data visualization
+matplotlib
+seaborn
+plotly
+
+# Machine learning
+scikit-learn
+joblib
+
+# Notebook environment
+jupyter
+ipykernel
+
+# Excel support
+openpyxl
+
+# Date and time utilities
+python-dateutil

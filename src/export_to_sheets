@@ -1,0 +1,149 @@
+
+from pathlib import Path
+import pandas as pd
+
+
+# ==========================================
+# 1. PROJECT PATH
+# ==========================================
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+PROCESSED_DIR = BASE_DIR / "data" / "processed"
+DASHBOARD_DIR = BASE_DIR / "data" / "dashboard"
+
+# Input files
+HISTORICAL_INPUT = PROCESSED_DIR / "daily_family_sales.csv"
+FORECAST_INPUT = PROCESSED_DIR / "final_forecast.csv"
+
+# Output files
+HISTORICAL_OUTPUT = DASHBOARD_DIR / "historical_sales.csv"
+FORECAST_OUTPUT = DASHBOARD_DIR / "demand_forecast.csv"
+
+
+# ==========================================
+# 2. VALIDATE INPUT FILES
+# ==========================================
+
+for file_path in [HISTORICAL_INPUT, FORECAST_INPUT]:
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"File not found: {file_path}"
+        )
+
+# Create dashboard directory if it doesn't exist
+DASHBOARD_DIR.mkdir(parents=True, exist_ok=True)
+
+
+# ==========================================
+# 3. LOAD HISTORICAL SALES
+# ==========================================
+
+print("Loading historical sales data...")
+
+historical = pd.read_csv(HISTORICAL_INPUT)
+
+required_historical = {"date", "family", "sales"}
+
+if not required_historical.issubset(historical.columns):
+    raise ValueError(
+        f"Historical data must contain: {required_historical}"
+    )
+
+historical["date"] = pd.to_datetime(
+    historical["date"],
+    errors="raise"
+)
+
+historical["sales"] = pd.to_numeric(
+    historical["sales"],
+    errors="raise"
+)
+
+# Select required columns
+historical_sales = historical[
+    ["date", "family", "sales"]
+].copy()
+
+# Sort data
+historical_sales = historical_sales.sort_values(
+    ["date", "family"]
+).reset_index(drop=True)
+
+
+# ==========================================
+# 4. LOAD FORECAST DATA
+# ==========================================
+
+print("Loading forecast data...")
+
+forecast = pd.read_csv(FORECAST_INPUT)
+
+required_forecast = {"date", "family", "prediction"}
+
+if not required_forecast.issubset(forecast.columns):
+    raise ValueError(
+        f"Forecast data must contain: {required_forecast}"
+    )
+
+forecast["date"] = pd.to_datetime(
+    forecast["date"],
+    errors="raise"
+)
+
+forecast["prediction"] = pd.to_numeric(
+    forecast["prediction"],
+    errors="raise"
+)
+
+# Select required columns
+demand_forecast = forecast[
+    ["date", "family", "prediction"]
+].copy()
+
+# Sort data
+demand_forecast = demand_forecast.sort_values(
+    ["date", "family"]
+).reset_index(drop=True)
+
+
+# ==========================================
+# 5. EXPORT CSV FILES
+# ==========================================
+
+historical_sales.to_csv(
+    HISTORICAL_OUTPUT,
+    index=False,
+    date_format="%Y-%m-%d"
+)
+
+demand_forecast.to_csv(
+    FORECAST_OUTPUT,
+    index=False,
+    date_format="%Y-%m-%d"
+)
+
+
+# ==========================================
+# 6. DATA SUMMARY
+# ==========================================
+
+print("\n========== EXPORT SUCCESS ==========")
+
+print("\nHISTORICAL SALES")
+print(f"Total rows      : {len(historical_sales):,}")
+print(f"Start date      : {historical_sales['date'].min().date()}")
+print(f"End date        : {historical_sales['date'].max().date()}")
+print(f"Product families: {historical_sales['family'].nunique()}")
+
+print("\nFORECAST DATA")
+print(f"Total rows      : {len(demand_forecast):,}")
+print(f"Start date      : {demand_forecast['date'].min().date()}")
+print(f"End date        : {demand_forecast['date'].max().date()}")
+print(f"Product families: {demand_forecast['family'].nunique()}")
+
+print("\nOUTPUT FILES")
+print(f"Historical: {HISTORICAL_OUTPUT}")
+print(f"Forecast  : {FORECAST_OUTPUT}")
+
+print("\n====================================")
