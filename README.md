@@ -1,259 +1,340 @@
-# Retail Sales Forecasting & Analytics
+# End-to-End Retail Sales Forecasting
 
-**Short-Term Retail Sales Forecasting Using Machine Learning and Power BI**
+An end-to-end data science project focused on analyzing historical retail sales patterns and developing a machine learning model to forecast daily sales across selected product families. The project combines exploratory data analysis, time series forecasting, model evaluation, and business intelligence visualization using Python and Power BI.
 
-An end-to-end data science project that analyzes historical retail sales and predicts short-term sales across selected product families using a Random Forest Regressor.
+---
 
-The project covers data exploration, feature engineering, baseline forecasting, machine learning, rolling-origin validation, recursive forecasting, and interactive business intelligence visualization using Power BI.
+## 1. Business Problem
 
-## Project Overview
+Retail businesses operate in an environment where customer purchasing behavior, promotional activities, and seasonal patterns can cause daily sales to fluctuate.
 
-Accurate sales forecasting helps retail businesses understand sales patterns, anticipate future revenue, and support better operational and planning decisions.
+Without reliable sales forecasts, business teams may struggle to:
 
-This project uses historical sales data from the Corporación Favorita Grocery Sales Forecasting dataset to develop a machine learning model for predicting sales over a 7-day horizon.
+- Anticipate changes in sales performance.
+- Identify high-performing and underperforming product categories.
+- Plan operational resources based on expected sales activity.
+- Evaluate promotional activities and their relationship with sales.
+- Make data-driven decisions using historical sales patterns.
 
-The original dataset contains sales records across multiple stores and product families. For this project, store-level records are aggregated to create daily sales data for five selected product families.
+Historical sales data provides valuable information, but understanding past performance alone is not sufficient. Businesses also need forward-looking insights to support operational and commercial planning.
 
-## Objectives
+### Business Questions
 
-- Explore historical retail sales patterns.
-- Perform data cleaning and preprocessing.
-- Develop time-based features for machine learning.
-- Establish baseline forecasting models.
-- Train and evaluate a Random Forest forecasting model.
-- Compare model performance using rolling-origin validation.
-- Generate recursive 7-day sales forecasts.
-- Identify sales trends and product family performance.
-- Present analytical results through an interactive Power BI dashboard.
+This project addresses the following questions:
 
-## Dataset
+1. How do daily sales evolve over time across different product families?
+2. Which product families contribute the most to overall sales?
+3. Are there recurring weekly sales patterns?
+4. How are promotional activities associated with sales performance?
+5. Can machine learning provide more reliable short-term sales forecasts than simple baseline methods?
+6. How can forecasting results be translated into actionable business insights?
 
-**Source:** Corporación Favorita Grocery Sales Forecasting  
-**Platform:** Kaggle  
-**Dataset Period:** January 2013 – August 2017
+---
 
-Selected product families:
+## 2. Project Objectives
 
-- GROCERY I
-- BEVERAGES
-- PRODUCE
-- CLEANING
-- DAIRY
+The main objective is to develop a data-driven retail sales forecasting solution that supports short-term business planning.
 
-The original transaction-level data is aggregated across stores to produce daily sales by product family.
+Specific objectives:
 
-The target variable is `sales`, representing the monetary value of sales in USD.
+- Perform exploratory data analysis to understand historical sales behavior.
+- Identify temporal patterns and differences between product families.
+- Develop baseline forecasting models for performance comparison.
+- Build a Random Forest model using time-based features.
+- Evaluate forecasting performance using chronological validation.
+- Visualize historical sales, forecasts, and model performance through an interactive Power BI dashboard.
+- Translate analytical findings into practical business recommendations.
 
-## Dataset Source
+---
 
-This project uses the **Store Sales – Time Series Forecasting** dataset provided by Corporación Favorita, originally published on Kaggle.
+## 3. Dataset
 
-The dataset contains historical daily sales records from multiple product families across Favorita grocery stores in Ecuador. It also includes supporting information such as store metadata, transactions, oil prices, and holiday events.
+This project uses the **Store Sales – Time Series Forecasting** dataset provided by Corporación Favorita through Kaggle.
 
-**Dataset source:** [Store Sales – Time Series Forecasting | Kaggle](https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data)
+**Dataset source:** [Store Sales – Time Series Forecasting (Kaggle)](https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data)
 
-**Note:** The original dataset files are not included in this GitHub repository due to file size limitations. To reproduce this project, download the dataset directly from Kaggle and place the required files in the `data/` directory according to the project structure.
+The dataset contains historical daily sales information from Favorita grocery stores in Ecuador, along with supporting information such as store metadata, transactions, oil prices, and holiday events.
 
 ### Dataset Files
-The project uses the following source files:
-- `train.csv` – Historical daily sales data.
-- `test.csv` – Test dataset.
-- `stores.csv` – Store metadata.
-- `transactions.csv` – Daily transaction records.
-- `oil.csv` – Daily oil prices.
-- `holidays_events.csv` – Holiday and event information.
 
-Processed datasets and model outputs used for analysis and Power BI visualization are provided in this repository where applicable.
+The original dataset includes:
 
-## Methodology
+| File | Description |
+|---|---|
+| `train.csv` | Historical daily sales records |
+| `test.csv` | Test dataset |
+| `stores.csv` | Store metadata |
+| `transactions.csv` | Daily transaction records |
+| `oil.csv` | Daily oil prices |
+| `holidays_events.csv` | Holiday and event information |
 
-### 1. Data Preparation
+### Project Dataset
 
-- Load and inspect the original dataset.
-- Aggregate store-level sales by date and product family.
-- Handle missing values and duplicate records.
-- Convert date columns into appropriate datetime formats.
-- Prepare separate datasets for historical analysis and model development.
+For this project, historical sales were aggregated by date and product family.
 
-### 2. Exploratory Data Analysis
+The resulting analytical dataset contains:
 
-Analyze:
+- **8,420 observations**
+- **3 columns:** `date`, `family`, and `sales`
+- **5 selected product families:** GROCERY I, BEVERAGES, PRODUCE, CLEANING, and DAIRY.
+- **Historical period:** January 2013 to August 2017.
 
-- Historical sales trends.
-- Sales distribution by product family.
+The target variable, `sales`, represents monetary sales value in USD rather than the number of units sold.
+
+**Note:** Original Kaggle dataset files are not included in this repository because of file size limitations. Download the dataset directly from Kaggle and place the required files in the appropriate local data directory before reproducing the project.
+
+---
+
+## 4. Project Workflow
+
+The project follows an end-to-end data science workflow:
+
+1. Data understanding and preparation.
+2. Exploratory data analysis.
+3. Feature engineering.
+4. Baseline forecasting.
+5. Random Forest model development.
+6. Model evaluation and validation.
+7. Forecast generation.
+8. Power BI dashboard development.
+9. Business insights and recommendations.
+
+### 4.1 Exploratory Data Analysis (EDA)
+
+EDA was conducted to understand historical sales behavior and identify potential patterns that could support forecasting.
+
+The analysis covers:
+
+- Overall daily sales trends.
+- Sales distribution and variability.
+- Sales contribution by product family.
+- Average sales by day of the week.
 - Weekly sales patterns.
-- Zero-sales observations.
-- Promotional sales patterns.
-- Product family contribution to total sales.
+- Promotional activity and its relationship with sales.
 
-### 3. Feature Engineering
+### 4.2 Feature Engineering
 
-**Time-based features:**
+Time-based features were created to capture historical sales behavior and temporal patterns.
 
-- Day of week
-- Day of month
-- Month
-- Year
+| Feature | Description |
+|---|---|
+| `day_of_week` | Day of the week |
+| `day` | Day of the month |
+| `month` | Month of the year |
+| `year` | Calendar year |
+| `lag_1` | Sales from the previous day |
+| `lag_7` | Sales from seven days earlier |
+| `lag_14` | Sales from fourteen days earlier |
+| `lag_28` | Sales from twenty-eight days earlier |
+| `rolling_mean_7` | Seven-day rolling average |
+| `rolling_mean_28` | Twenty-eight-day rolling average |
 
-**Lag features:**
+These features enable the model to learn relationships between recent historical sales and future sales values.
 
-- Lag 1
-- Lag 7
-- Lag 14
-- Lag 28
+### 4.3 Baseline Forecasting
 
-**Rolling features:**
+Three baseline approaches were developed to establish reference forecasting performance:
 
-- 7-day rolling mean
-- 28-day rolling mean
+- **Naive:** Uses the most recent observed sales value as the forecast.
+- **Moving Average (7):** Uses the average of the previous seven days.
+- **Seasonal Naive (7):** Uses sales from the corresponding day in the previous week.
 
-Rolling features are shifted by one period to prevent target leakage.
+### 4.4 Machine Learning Model
 
-### 4. Baseline Models
+Random Forest Regressor was selected as the main machine learning approach.
 
-Three baseline forecasting approaches are implemented:
+The model uses engineered time-based features to estimate future daily sales for each selected product family.
 
-- Naive Forecasting
-- Moving Average Forecasting (7-day)
-- Seasonal Naive Forecasting (7-day)
+A recursive forecasting strategy was applied to generate a seven-day forecast, where previously predicted values are incorporated into subsequent forecasting steps.
 
-These models provide reference points for evaluating the performance of the machine learning model.
+---
 
-### 5. Machine Learning Model
+## 5. Model Evaluation
 
-A Random Forest Regressor is developed using:
+### Validation Strategy
 
-- One-hot encoding for product family.
-- Calendar features.
-- Lag features.
-- Rolling statistical features.
+A chronological expanding-window rolling-origin validation strategy was implemented.
 
-The model uses recursive forecasting for multi-step predictions, where each predicted value is incorporated into subsequent forecasting steps.
+The evaluation consists of eight validation folds, each covering seven consecutive days.
 
-### 6. Model Evaluation
+For every fold:
 
-Model performance is evaluated using:
+- The model is trained using historical observations available up to a specific cutoff date.
+- The next seven days are used as the validation period.
+- The training window expands as the evaluation progresses.
 
-- Mean Absolute Error (MAE)
-- Root Mean Squared Error (RMSE)
-- Weighted Absolute Percentage Error (WAPE)
+This approach preserves the chronological order of time series data and avoids random train-test splitting.
 
-WAPE is selected as the primary evaluation metric because the dataset contains zero-sales observations, making MAPE unsuitable.
+### Evaluation Metrics
 
-An expanding-window rolling-origin validation approach is implemented with:
+Three metrics were used:
 
-- 8 validation folds.
-- 7 days per validation fold.
-- Chronological training and validation periods.
-- Expanding training windows.
+| Metric | Purpose |
+|---|---|
+| MAE | Measures average absolute forecasting error |
+| RMSE | Penalizes larger forecasting errors |
+| WAPE | Measures total absolute error relative to total actual sales |
 
-This approach evaluates model performance across multiple historical periods while preserving temporal order.
+WAPE was selected as the primary comparison metric because the dataset contains many zero-sales observations, making MAPE unsuitable.
 
-## Results
+\[
+WAPE = \frac{\sum |Actual - Forecast|}{\sum Actual} \times 100\%
+\]
 
 ### Overall Model Performance
 
+Results from the rolling validation evaluation:
+
 | Model | MAE | RMSE | WAPE |
 |---|---:|---:|---:|
-| Random Forest | 9,278.69 | 13,687.81 | 6.80% |
+| Random Forest | 9,278.69 | 13,687.81 | **6.80%** |
 | Seasonal Naive (7) | 15,722.65 | 23,913.79 | 11.52% |
 | Moving Average (7) | 23,174.78 | 32,021.76 | 16.98% |
 | Naive | 24,563.75 | 38,205.27 | 18.00% |
 
-### Key Findings
+### Key Evaluation Findings
 
-- Random Forest achieved the lowest overall WAPE of **6.80%**.
+- Random Forest achieved the lowest overall MAE, RMSE, and WAPE.
 - Random Forest reduced WAPE by approximately **40.98%** compared with Seasonal Naive.
-- Random Forest outperformed the other models in **7 out of 8 validation folds**.
-- PRODUCE achieved the lowest product-family WAPE at **3.81%**.
-- CLEANING had the highest product-family WAPE at **15.27%**, indicating greater forecasting difficulty.
+- Random Forest outperformed the other evaluated models in seven out of eight validation folds.
+- Its performance was not consistently superior in every fold, indicating that forecasting reliability can vary across different periods.
 
-### Validation Considerations
+These results suggest that incorporating historical and temporal features through Random Forest provides better forecasting performance than the evaluated baseline approaches.
 
-The evaluation uses eight chronological validation windows, each covering seven days.
+---
 
-Model hyperparameters should be selected using training-only tuning windows, independently of the final validation folds. The reported metrics represent historical validation performance and should not be interpreted as a guarantee of future forecasting accuracy.
+## 6. Business Insights
 
-WAPE is calculated as the sum of absolute prediction errors divided by the sum of actual sales, multiplied by 100.
+Based on the exploratory analysis and model evaluation, several findings can be translated into business considerations.
 
-## Power BI Dashboard
+### 6.1 Weekly Sales Patterns
 
-The project uses Microsoft Power BI as the primary business intelligence and visualization platform.
+Historical analysis indicates differences in average sales across days of the week:
+
+- Sunday records the highest average daily sales.
+- Thursday records the lowest average daily sales.
+
+**Business implication:**
+
+Operational teams can use recurring weekly patterns as an initial reference when planning staffing, store activities, and operational capacity.
+
+However, these patterns should be monitored over time rather than assumed to remain constant.
+
+### 6.2 Promotional Activities
+
+Exploratory analysis indicates a positive relationship between promotional activities and sales.
+
+**Business implication:**
+
+Promotional activities may contribute to higher sales, but their effectiveness should be evaluated further by comparing sales performance across comparable periods and accounting for other factors such as seasonality and holidays.
+
+Promotions should not automatically be considered the sole cause of increased sales.
+
+### 6.3 Forecasting Performance Across Product Families
+
+Random Forest performance differs across product families.
+
+| Product Family | WAPE |
+|---|---:|
+| PRODUCE | 3.81% |
+| DAIRY | 5.00% |
+| BEVERAGES | 6.34% |
+| GROCERY I | 6.64% |
+| CLEANING | 15.27% |
+
+**Business implication:**
+
+- PRODUCE has the lowest forecasting error among the selected product families.
+- CLEANING has the highest forecasting error and requires closer monitoring.
+- Forecasting approaches may need to be evaluated separately for different product families rather than assuming one model performs equally well across all categories.
+
+### 6.4 Model Reliability Over Time
+
+Random Forest outperformed the evaluated alternatives in seven of eight validation folds. However, its performance weakened in later validation periods, and Naive performed better in the final fold.
+
+**Business implication:**
+
+Forecasting models should be monitored regularly. Model performance should be reassessed as new sales observations become available, particularly when actual sales begin to diverge from predicted values.
+
+---
+
+## 7. Business Recommendations
+
+Based on the findings, the following recommendations are proposed:
+
+| Area | Recommendation | Expected Business Value |
+|---|---|---|
+| Operational Planning | Use weekly sales patterns as an initial reference for staffing and operational capacity planning. | Better alignment between operations and expected sales activity. |
+| Sales Planning | Use short-term forecasts to support daily and weekly sales planning. | More proactive planning based on expected sales performance. |
+| Promotion Evaluation | Monitor sales changes during promotional periods and compare them with suitable non-promotional periods. | Better understanding of promotional effectiveness. |
+| Product Family Monitoring | Prioritize forecasting error analysis for product families with higher WAPE, especially CLEANING. | Improved forecasting reliability across categories. |
+| Model Monitoring | Periodically compare model forecasts with actual sales and reassess model performance. | Reduced risk of relying on outdated forecasting behavior. |
+
+These recommendations are intended to support decision-making and should be evaluated alongside additional business information before implementation.
+
+---
+
+## 8. Power BI Dashboard
+
+An interactive Power BI dashboard was developed to communicate analytical findings and make forecasting results easier to interpret.
 
 The dashboard consists of four main pages:
 
-### 1. Executive Overview
+### 8.1 Executive Overview
 
-Provides a high-level summary of retail sales performance through:
+Provides a high-level summary of retail sales performance, including key performance indicators and overall sales trends.
 
-- Total Historical Sales
-- Average Daily Sales
-- Total Forecast Sales
-- Best-performing Product Family
-- Historical Sales Trends
-- Sales Contribution by Product Family
-- Automated Business Insights
+### 8.2 Sales Analysis
 
-### 2. Sales Analysis
+Explores historical sales performance across product families and time periods, including weekly patterns and promotional analysis.
 
-Explores historical sales patterns through:
+### 8.3 Sales Forecast
 
-- Daily and monthly sales trends.
-- Sales distribution by product family.
-- Weekly sales patterns.
-- Promotion vs. non-promotion sales analysis.
-- Product family contribution.
-- Interactive date and product family filters.
+Displays historical actual sales alongside forecasted sales, allowing users to examine expected short-term sales behavior.
 
-### 3. Sales Forecast
+**Dashboard file:** `dashboard/power bi/retail-sales-forecasting_dashboard.pbix`
+**Dashboard source:** https://docs.google.com/spreadsheets/d/1w0zjZTuxiwEv-IVWhKkjnXfDaaZ2Y9XlBl1DiJA6nJ4/edit?usp=sharing
 
-Presents forecasting results through:
+---
 
-- Historical Actual vs. Forecast.
-- 7-Day Sales Forecast.
-- Forecast by Product Family.
-- Forecast Trend Visualization.
-- Forecast Summary.
+## 9. Technology Stack
 
-### 4. Model Performance
+| Category | Tools |
+|---|---|
+| Programming Language | Python |
+| Data Manipulation | Pandas, NumPy |
+| Data Visualization | Matplotlib, Seaborn |
+| Machine Learning | Scikit-learn |
+| Model Evaluation | MAE, RMSE, WAPE |
+| Development Environment | VS Code, Jupyter Notebook |
+| Business Intelligence | Microsoft Power BI |
+| Version Control | Git, GitHub |
 
-Evaluates forecasting models through:
+---
 
-- Overall Model Comparison.
-- MAE, RMSE, and WAPE.
-- Validation Performance by Fold.
-- Model Performance by Product Family.
-- Actual vs. Predicted Sales.
-- Model Evaluation Insights.
-
-## Project Structure
+## 10. Project Structure
 
 ```text
-retail-sales-forecasting/
-│
-├── README.md
-├── requirements.txt
-├── .gitignore
+End-to-end-Retail-Sales-Forecasting-Project/
 │
 ├── dashboard/
-│   └── power-bi/
-│       ├── README.md
-│       └── retail-sales-forecasting-dashboard.pbix
+│   └── power bi/
+│       ├── README.txt
+│       └── retail-sales-forecasting_dashboard.pbix
 │
 ├── data/
-│   │
-│   ├── processed/
-│   │   ├── daily_family_sales.csv
-│   │   ├── forecasting_features.csv
-│   │   ├── final_forecast.csv
-│   │   ├── rolling_validation_metrics.csv
-│   │   ├── rolling_validation_metrics_by_family.csv
-│   │   ├── rolling_validation_metrics_by_fold.csv
+│   ├── dashboard/
+│   │   ├── demand_forecast.csv
+│   │   ├── historical_sales.csv
 │   │   └── validation_predictions.csv
 │   │
-│   └── dashboard/
-│       ├── historical_sales.csv
-│       ├── demand_forecast.csv
+│   └── processed/
+│       ├── daily_family_sales.csv
+│       ├── final_forecast.csv
+│       ├── forecasting_features.csv
+│       ├── rolling_validation_metrics.csv
+│       ├── rolling_validation_metrics_by_family.csv
+│       ├── rolling_validation_metrics_by_fold.csv
 │       └── validation_predictions.csv
 │
 ├── models/
@@ -265,115 +346,106 @@ retail-sales-forecasting/
 │   ├── 01_data-understanding.ipynb
 │   ├── 02_feature-engineering.ipynb
 │   ├── 03_baseline-forecasting.ipynb
-│   └── 04_random-forest-model.ipynb
+│   └── 04_random_forest_model.ipynb
 │
 ├── reports/
 │   ├── EDA/
-│   │   ├── averagesales-dayoftheweek.png
-│   │   ├── daily-sales-trend.png
-│   │   ├── distribution-daily-sales.png
-│   │   ├── top-15-product-family.png
-│   │   └── weekly-sales-pattern.png
-│   │
 │   └── baseline-forecasting/
-│       ├── actualvsforecast-grocery.png
-│       └── actualvsforecast-others.png
 │
-└── src/
-    ├── __init__.py
-    ├── config.py
-    ├── data_loader.py
-    ├── evaluation.py
-    ├── forecasting.py
-    └── export_to_sheets.py
+├── src/
+│   ├── config.py
+│   ├── data_loader.py
+│   ├── evaluation.py
+│   └── forecasting.py
+│
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
-## Installation
+Note: Original raw Kaggle datasets are excluded from the repository. The structure above focuses on the files used for analysis, modeling, and dashboard development.
 
-### 1. Clone the Repository
+---
+
+## 11. How to Run the Project
+
+### Prerequisites
+
+- Python 3.11
+- Git
+- Jupyter Notebook or VS Code
+- Microsoft Power BI Desktop (for dashboard exploration)
+
+### Installation
+
+Clone the repository:
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd retail-sales-forecasting
+git clone https://github.com/wvynngnce/End-to-end-Retail-Sales-Forecasting-Project.git
+cd End-to-end-Retail-Sales-Forecasting-Project
 ```
 
-### 2. Create a Virtual Environment
+Create and activate a virtual environment:
 
 ```bash
 python -m venv .venv
 ```
 
-Activate the environment on Windows:
+Windows:
 
 ```powershell
 .venv\Scripts\activate
 ```
 
-### 3. Install Dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Prepare the Dataset
+### Dataset Preparation
 
-Download the Corporación Favorita Grocery Sales Forecasting dataset from Kaggle.
+1. Download the original dataset from [Kaggle](https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data).
+2. Extract the required raw dataset files.
+3. Place them in the local `data/` directory.
+4. Run the notebooks in numerical order to understand the analysis and modeling workflow.
 
-Place the required source files in:
+### Dashboard
 
-```text
-data/raw/
-```
-
-Processed datasets and model outputs are stored in:
-
-```text
-data/processed/
-```
-
-### 5. Run the Analysis
-
-Open the notebooks in the `notebooks/` directory using Jupyter Notebook or Visual Studio Code.
-
-Execute the notebooks in sequential order to reproduce the data preparation, exploratory analysis, model development, evaluation, and forecasting workflow.
-
-### 6. Open the Power BI Dashboard
-
-Open the Power BI project:
+Open the Power BI file:
 
 ```text
-powerbi/retail_sales_dashboard.pbix
+dashboard/power bi/retail-sales-forecasting_dashboard.pbix
 ```
 
-Update the data source paths if necessary to match your local repository directory.
+If necessary, update the CSV data source paths in Power BI to match your local directory.
 
-## Limitations
+---
 
-- The analysis uses aggregated sales across stores rather than store-level forecasting.
-- Only five product families are included.
-- The dataset ends in August 2017 and does not represent current retail market conditions.
-- External factors such as weather, economic conditions, and holidays are not fully incorporated.
-- Recursive forecasting may accumulate prediction errors over longer horizons.
-- Forecasts are point estimates and do not include prediction intervals.
-- Sales value forecasts cannot be directly interpreted as physical inventory quantities.
+## 12. Limitations and Future Improvements
 
-## Future Improvements
+Although Random Forest achieved the best overall performance among the evaluated models, several improvements could be explored:
 
-- Incorporate additional external variables and holiday information.
-- Evaluate additional machine learning and deep learning forecasting algorithms.
-- Explore advanced time-series models.
-- Develop prediction intervals to quantify forecasting uncertainty.
-- Extend the analysis to store-level forecasting.
-- Integrate inventory optimization and replenishment planning.
-- Develop automated data pipelines and model monitoring.
+- **Advanced Time Series Models:** Compare Random Forest with XGBoost, LightGBM, Prophet, and other forecasting approaches.
+- **External Variables:** Incorporate holiday, oil price, transaction, and store-level information into the forecasting pipeline.
+- **Granular Forecasting:** Extend the analysis from aggregated product-family sales to store-level or product-level forecasting.
+- **Model Monitoring:** Implement automated performance tracking and periodic model retraining.
+- **Forecast Explainability:** Apply feature importance or SHAP to better understand the factors influencing predictions.
+- **Advanced Optimization:** Connect sales forecasts with inventory planning and supply chain optimization in a future project.
 
-## Author
+---
 
-**M. Arif Fadhillah**
+## 13. Conclusion
 
-Industrial Engineering Graduate  
-Universitas Islam Indonesia
+This project demonstrates an end-to-end data science workflow for retail sales forecasting, from data exploration and feature engineering to machine learning evaluation and business intelligence visualization.
 
-Interested in Data Science, Machine Learning, Optimization, and Supply Chain Analytics.#   E n d - t o - e n d - R e t a i l - S a l e s - F o r e c a s t i n g - P r o j e c t 
- 
- 
+Random Forest achieved an overall WAPE of **6.80%**, outperforming the evaluated baseline models and providing a useful foundation for short-term sales planning.
+
+Beyond model performance, the analysis highlights differences in weekly sales patterns, promotional activity, and forecasting reliability across product families.
+
+The project illustrates how historical retail data can be transformed into predictive insights and communicated through an interactive dashboard to support more informed business decisions.
+
+---
+
+**Author:** Muhammad Arif Fadhillah  
+**Field:** Industrial Engineering | Data Science | Machine Learning | Supply Chain Analytics
